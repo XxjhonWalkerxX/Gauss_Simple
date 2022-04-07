@@ -1,0 +1,41 @@
+import numpy as np
+import os
+import time
+os.system('cls')
+Tam=int(input("Digite el nuemro de ecuaciones  "))
+#creo matriz con ceros para no generar basura
+Sol= np.zeros(Tam)
+Matriz=np.zeros((Tam,Tam))
+print("\nDigite los coeficientes de la ecuacion")
+#llenar matriz
+for r in range(0,Tam):
+    for c in range(0,Tam):
+        Matriz[r,c]=input("[{},{}]  ".format(r+1,c+1))
+    Sol[r]=input(" ingrese el valor independiente ")
+
+print("\t\t\tLa matriz seria\n",Matriz,"\nVector Solucion \t",Sol,"\n\n\n")
+time.sleep(5)
+os.system('cls')
+for i in range(Tam-1):
+    Sol[i]=Sol[i]/Matriz[i,i]
+    Matriz[i]=Matriz[i]/Matriz[i,i] #pivote
+    for k in range(i+1,Tam):
+        Sol[k]=Sol[k]-Matriz[k,i]*Sol[i]
+        Matriz[k]=Matriz[k]-Matriz[k,i]*Matriz[i]
+    print(Matriz,Sol,'\n')
+i=Tam-1
+Sol[i]=Sol[i]/Matriz[i,i]
+Matriz[i]=Matriz[i]/Matriz[i,i]
+B=np.transpose([Sol])
+x=np.zeros(Tam)
+for i in reversed(range(Tam)):
+    suma=np.sum(Matriz[i][i+1:]*x[i+1:])
+    x[i]=Sol[i]-suma
+
+AB=np.concatenate((Matriz,B),axis=1)
+for r in range(0,Tam):
+    for c in range(0,Tam+1):
+        print("{}    ".format(AB[r,c]),end=' ')
+    print('\n')   
+for j in range(0,Tam):
+    print("La solucion X{}".format(j+1), x[j])
